@@ -1,0 +1,14 @@
+# Database
+mysql-connector-python>=8.0.0
+
+# Hardware & GPIO
+RPi.GPIO>=0.7.0
+spidev>=3.6
+
+# NeoPixel / WS2812B LEDs
+adafruit-blinka>=8.0.0
+adafruit-circuitpython-neopixel>=6.3.0
+rpi-ws281x>=5.0.0
+
+# Configuration & Utilities
+python-dotenv>=1.0.0

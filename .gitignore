@@ -1,0 +1,43 @@
+# ==========================================
+# 1. Environment & Sensitive Config Files
+# ==========================================
+.env
+.Renviron
+config.py
+*.key
+*.pem
+
+# ==========================================
+# 2. Local Databases & Logs
+# ==========================================
+*.db
+*.sqlite
+*.sqlite3
+trash_fallback.db
+*.log
+
+# ==========================================
+# 3. Python Cache & Virtual Environments
+# ==========================================
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+env/
+.venv/
+
+# ==========================================
+# 4. R History, Data & Cache
+# ==========================================
+.Rhistory
+.RData
+.Ruserdata
+.Rproj.user/
+
+# ==========================================
+# 5. OS & Editor Metadata
+# ==========================================
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
