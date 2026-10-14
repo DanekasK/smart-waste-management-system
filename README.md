@@ -18,16 +18,20 @@ Traditional waste bins often overflow before collection or get emptied while nea
 ---
 
 ## System Architecture & Workflow
+
+```text
 Hardware Layer:
-  -  Ultrasonic Sensors  ──►  Calculate Fill %  ──►  WS2812B LEDs (Status Colors)
-  -  IR Break Sensors    ──►  Detect Drop Events
+  • Ultrasonic Sensors  ──►  Calculate Fill %  ──►  WS2812B LEDs (Status Colors)
+  • IR Break Sensors    ──►  Detect Drop Events
 
 Database Layer:
-  -  Sensor Data         ──►  MySQL Database (waste_management)
+  • Sensor Data         ──►  MySQL Database (waste_management)
 
 Application Layer:
-  -  MySQL Database      ──►  SMTP Alert Daemon  ──►  SMS & Email Alerts
-  -  MySQL Database      ──►  R Shiny Dashboard  ──►  Live Fill Levels & Charts
+  • MySQL Database      ──►  SMTP Alert Daemon  ──►  SMS & Email Alerts
+  • MySQL Database      ──►  R Shiny Dashboard  ──►  Live Fill Levels & Charts
+```
+
 ---
 
 ## Hardware Components
@@ -43,20 +47,35 @@ Application Layer:
 ## Repository Structure
 
 ```text
-├── hardware/
-│   ├── config.py             # Hardware pinouts & baseline sensor configurations
-│   ├── sensor_led.py         # Ultrasonic distance loop & LED controller
-│   ├── ir_sensor.py          # MCP3008 ADC SPI loop for beam break detection
-│   └── smtp_alerts.py        # Automated email & SMS threshold notification daemon
-├── dashboard/
-│   ├── app.R                 # Real-time R Shiny administrative dashboard
-│   └── setup_apache.md       # Apache / Shiny server reverse proxy instructions
-├── database/
-│   └── schema.sql            # Table definitions for readings, IR events, and contacts
-├── docs/                     # Schematics, design diagrams, and hardware photos
+smart-waste-management-system/
 ├── .env.example              # Template for database & SMTP credentials
 ├── .gitignore                # Files excluded from version control
-└── README.md
+├── LICENSE                   # MIT open-source license
+├── README.md                 # Project documentation and setup guide
+├── requirements.txt          # Python dependencies
+│
+├── Documentations/
+│   ├── raspberry_pi_setup.md # Hardware pinouts and OS setup guide
+│   └── user_manual.md        # Operations, maintenance, and role guide
+│
+├── dashboard/
+│   ├── apache_setup.md       # Apache reverse-proxy instructions
+│   ├── data.R                # Interactive R Shiny telemetry dashboard
+│   ├── WasteManagementDashboard1.png
+│   └── WasteManagementDashboard2.png
+│
+├── database/
+│   ├── Database.png
+│   ├── Database2.png
+│   ├── Database3.png
+│   ├── sample_queries.sql    # Analytical and diagnostic SQL queries
+│   └── schema.sql            # Table definitions for readings, IR events, contacts, admins
+│
+└── hardware/
+    ├── config.py             # Hardware pinouts & baseline sensor configurations
+    ├── ir_sensor.py          # MCP3008 ADC SPI loop for beam break detection
+    ├── sensor_led.py         # Ultrasonic distance loop & LED controller
+    └── SMTP.py               # Automated email & SMS threshold notification daemon
 ```
 
 ---
@@ -68,7 +87,7 @@ The system relies on a centralized MySQL schema (`waste_management`):
 - `ultrasonic_readings`: Stores `bin_id`, `distance_cm`, `fill_percent`, and `reading_time`.
 - `ir_sensor_events`: Logs `compartment_id`, `beam_broken` flags, and `event_time`.
 - `smtp_contacts`: Stores notification recipient emails, carrier gateways, and alert thresholds.
-- `Admins`: Stores administrator credentials and hashed passwords.
+- `admins`: Stores administrator credentials and hashed passwords.
 
 ---
 
@@ -109,16 +128,32 @@ python hardware/sensor_led.py &
 python hardware/ir_sensor.py &
 
 # Start notification service
-python hardware/smtp_alerts.py &
+python hardware/SMTP.py &
 ```
 
 ### 4. Running the Dashboard
 ```bash
 Rscript -e "shiny::runApp('dashboard/data.R', port=3838, host='0.0.0.0')"
 ```
+
+---
+
+## Dashboard Analytics & Live Telemetry
+
+The interactive R Shiny web interface displays live compartment fill levels, total trash distribution, and peak disposal activity trends over time:
+
 ![Waste Management Dashboard Preview](dashboard/WasteManagementDashboard1.png)
 
 ![Trash Activity Trends](dashboard/WasteManagementDashboard2.png)
+
+---
+
+## Database Architecture & Volume
+
+The MySQL backend handles continuous high-frequency telemetry from the Raspberry Pi sensor daemons:
+
+![Database Schema & Metrics](database/Database2.png)
+
 ---
 
 ## License
