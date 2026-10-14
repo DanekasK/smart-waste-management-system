@@ -114,9 +114,11 @@ python hardware/smtp_alerts.py &
 
 ### 4. Running the Dashboard
 ```bash
-Rscript -e "shiny::runApp('dashboard/app.R', port=3838, host='0.0.0.0')"
+Rscript -e "shiny::runApp('dashboard/data.R', port=3838, host='0.0.0.0')"
 ```
+![Waste Management Dashboard Preview](dashboard/WasteManagementDashboard1.png)
 
+![Trash Activity Trends](dashboard/WasteManagementDashboard2.png)
 ---
 
 ## License
